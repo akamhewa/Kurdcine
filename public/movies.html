@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>فیلمەکان | Kurd Cine</title>
+
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<header class="navbar">
+
+  <a href="/" class="logo">
+    KURD<span>CINE</span>
+  </a>
+
+  <nav>
+    <a href="/">سەرەکی</a>
+
+    <a href="/movies.html">
+      فیلمەکان
+    </a>
+
+    <a href="/series.html">
+      زنجیرەکان
+    </a>
+
+    <a href="/admin.html">
+      بەڕێوەبردن
+    </a>
+  </nav>
+
+</header>
+
+
+<main>
+
+  <section class="section">
+
+    <div class="section-title">
+      <h1>🎬 فیلمەکان</h1>
+    </div>
+
+
+    <div class="search-box">
+
+      <input
+        id="search"
+        type="search"
+        placeholder="گەڕان بە ناوی فیلم..."
+        autocomplete="off"
+      >
+
+    </div>
+
+
+    <div
+      id="movies"
+      class="movie-grid"
+    ></div>
+
+  </section>
+
+</main>
+
+
+<footer>
+  <p>© Kurd Cine</p>
+</footer>
+
+
+<script src="/app.js"></script>
+
+
+<script>
+
+async function searchMovies() {
+
+  const element = document.getElementById("movies");
+  const search = document.getElementById("search");
+
+  const q = search.value.trim();
+
+  try {
+
+    const response = await fetch(
+      "/api/titles?type=movie&q=" +
+      encodeURIComponent(q)
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to load movies");
+    }
+
+    const titles = await response.json();
+
+
+    if (!titles.length) {
+
+      element.innerHTML = `
+        <div class="empty">
+          <p>
+            هیچ فیلمێک نەدۆزرایەوە.
+          </p>
+        </div>
+      `;
+
+      return;
+    }
+
+
+    element.innerHTML = titles.map(title => {
+
+      const poster =
+        title.poster ||
+        "https://placehold.co/400x600/111522/ffffff?text=Kurd+Cine";
+
+
+      return `
+        <a
+          class="card"
+          href="/details.html?id=${title.id}"
+        >
+
+          <img
+            src="${escapeHTML(poster)}"
+            alt="${escapeHTML(title.title)}"
+            loading="lazy"
+            onerror="this.src='https://placehold.co/400x600/111522/ffffff?text=Kurd+Cine'"
+          >
+
+          <div class="card-content">
+
+            <div class="card-title">
+              ${escapeHTML(title.title)}
+            </div>
+
+            <div class="card-meta">
+
+              ${escapeHTML(title.year || "")}
+
+              ${
+                title.genre
+                  ? " • " + escapeHTML(title.genre)
+                  : ""
+              }
+
+            </div>
+
+          </div>
+
+        </a>
+      `;
+
+    }).join("");
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    element.innerHTML = `
+      <div class="empty">
+        <p>
+          کێشەیەک ڕوویدا لە بارکردنی فیلمەکان.
+        </p>
+      </div>
+    `;
+
+  }
+
+}
+
+
+function escapeHTML(value) {
+
+  return String(value || "").replace(
+    /[&<>"']/g,
+    character => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;"
+    })[character]
+  );
+
+}
+
+
+document
+  .getElementById("search")
+  .addEventListener(
+    "input",
+    searchMovies
+  );
+
+
+searchMovies();
+
+</script>
+
+</body>
+
+</html>
