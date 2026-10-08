@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>وردەکاری | Kurd Cine</title>
+
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<header class="navbar">
+
+  <a href="/" class="logo">
+    KURD<span>CINE</span>
+  </a>
+
+  <nav>
+
+    <a href="/">سەرەکی</a>
+
+    <a href="/movies.html">
+      فیلمەکان
+    </a>
+
+    <a href="/series.html">
+      زنجیرەکان
+    </a>
+
+    <a href="/admin.html">
+      بەڕێوەبردن
+    </a>
+
+  </nav>
+
+</header>
+
+
+<main>
+
+  <section class="section">
+
+    <div id="details">
+
+      <p>
+        چاوەڕێ بکە...
+      </p>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<footer>
+
+  <p>
+    © Kurd Cine
+  </p>
+
+</footer>
+
+
+<script>
+
+const params =
+  new URLSearchParams(window.location.search);
+
+const id =
+  params.get("id");
+
+
+async function loadDetails() {
+
+  const element =
+    document.getElementById("details");
+
+
+  if (!id) {
+
+    element.innerHTML = `
+      <div class="empty">
+        <p>
+          ناونیشانی ناوەڕۆک نەدۆزرایەوە.
+        </p>
+      </div>
+    `;
+
+    return;
+  }
+
+
+  try {
+
+    const response =
+      await fetch("/api/titles/" + encodeURIComponent(id));
+
+
+    if (!response.ok) {
+      throw new Error("Failed to load details");
+    }
+
+
+    const data =
+      await response.json();
+
+
+    const title =
+      data.title || data;
+
+
+    const seasons =
+      data.seasons || [];
+
+
+    const episodes =
+      data.episodes || [];
+
+
+    const poster =
+      title.poster ||
+      "https://placehold.co/500x750/111522/ffffff?text=Kurd+Cine";
+
+
+    element.innerHTML = `
+
+      <div class="detail">
+
+        <img
+          class="detail-poster"
+          src="${escapeHTML(poster)}"
+          alt="${escapeHTML(title.title)}"
+          onerror="this.src='https://placehold.co/500x750/111522/ffffff?text=Kurd+Cine'"
+        >
+
+
+        <div class="detail-info">
+
+          <h1>
+            ${escapeHTML(title.title)}
+          </h1>
+
+
+          <div class="card-meta">
+
+            ${escapeHTML(title.year || "")}
+
+            ${
+              title.genre
+                ? " • " + escapeHTML(title.genre)
+                : ""
+            }
+
+          </div>
+
+
+          ${
+            title.description
+              ? `
+                <p>
+                  ${escapeHTML(title.description)}
+                </p>
+              `
+              : ""
+          }
+
+
+          ${
+            title.type === "movie" && title.videoUrl
+              ? `
+                <a
+                  class="btn"
+                  href="${escapeHTML(title.videoUrl)}"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  ▶️ بینینی فیلم
+                </a>
+              `
+              : ""
+          }
+
+        </div>
+
+      </div>
+
+
+      ${
+        title.type === "series"
+          ? renderEpisodes(seasons, episodes)
+          : ""
+      }
+
+    `;
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    element.innerHTML = `
+
+      <div class="empty">
+
+        <p>
+          کێشەیەک ڕوویدا لە بارکردنی زانیاری.
+        </p>
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+function renderEpisodes(seasons, episodes) {
+
+  if (!episodes.length) {
+
+    return `
+      <div class="section">
+        <h2>
+          ئەڵقەکان
+        </h2>
+
+        <p>
+          هێشتا هیچ ئەڵقەیەک زیاد نەکراوە.
+        </p>
+      </div>
+    `;
+
+  }
+
+
+  let html = "";
+
+
+  seasons.forEach(season => {
+
+    const seasonEpisodes =
+      episodes.filter(
+        episode =>
+          String(episode.seasonId) ===
+          String(season.id)
+      );
+
+
+    html += `
+
+      <div class="section">
+
+        <h2>
+          وەرزی ${escapeHTML(
+            season.seasonNumber ||
+            season.number ||
+            ""
+          )}
+        </h2>
+
+
+        <div class="movie-grid">
+
+          ${
+            seasonEpisodes.map(episode => `
+
+              <div class="card">
+
+                <div class="card-content">
+
+                  <div class="card-title">
+
+                    ${escapeHTML(
+                      episode.title ||
+                      "ئەڵقە " +
+                      (episode.episodeNumber || "")
+                    )}
+
+                  </div>
+
+
+                  ${
+                    episode.videoUrl
+                      ? `
+                        <a
+                          class="btn"
+                          href="${escapeHTML(episode.videoUrl)}"
+                          target="_blank"
+                          rel="noopener"
+                        >
+                          ▶️ بینینی ئەڵقە
+                        </a>
+                      `
+                      : `
+                        <div class="card-meta">
+                          لینکێکی بینین دانەنراوە.
+                        </div>
+                      `
+                  }
+
+                </div>
+
+              </div>
+
+            `).join("")
+          }
+
+        </div>
+
+      </div>
+
+    `;
+
+  });
+
+
+  return html;
+}
+
+
+function escapeHTML(value) {
+
+  return String(value || "").replace(
+    /[&<>"']/g,
+
+    character => ({
+
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;"
+
+    })[character]
+  );
+
+}
+
+
+loadDetails();
+
+</script>
+
+</body>
+
+</html>
