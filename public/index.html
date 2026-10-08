@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Kurd Cine | فیلم و زنجیرە</title>
+
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<header class="navbar">
+
+  <a href="/" class="logo">
+    KURD<span>CINE</span>
+  </a>
+
+  <nav>
+    <a href="/">سەرەکی</a>
+    <a href="/movies.html">فیلمەکان</a>
+    <a href="/series.html">زنجیرەکان</a>
+    <a href="/admin.html">بەڕێوەبردن</a>
+  </nav>
+
+</header>
+
+
+<main>
+
+<section class="hero">
+
+  <div class="hero-content">
+
+    <div class="label">
+      KURD CINE
+    </div>
+
+    <h1>
+      جیهانی فیلم و زنجیرە
+      <br>
+      لە یەک شوێن
+    </h1>
+
+    <p>
+      فیلم و زنجیرەکانت بە شێوەیەکی جوان
+      و خێرا ببینە.
+    </p>
+
+    <div class="buttons">
+
+      <a href="/movies.html" class="btn">
+        🎬 فیلمەکان
+      </a>
+
+      <a href="/series.html" class="btn secondary">
+        📺 زنجیرەکان
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<section class="section">
+
+  <div class="section-title">
+
+    <h2>
+      نوێترین فیلمەکان
+    </h2>
+
+    <a href="/movies.html">
+      هەموویان ببینە →
+    </a>
+
+  </div>
+
+  <div id="movies" class="movie-grid">
+
+  </div>
+
+</section>
+
+
+<section class="section">
+
+  <div class="section-title">
+
+    <h2>
+      نوێترین زنجیرەکان
+    </h2>
+
+    <a href="/series.html">
+      هەموویان ببینە →
+    </a>
+
+  </div>
+
+  <div id="series" class="movie-grid">
+
+  </div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+  <div class="logo">
+    KURD<span>CINE</span>
+  </div>
+
+  <p>
+    © 2026 Kurd Cine
+  </p>
+
+</footer>
+
+
+<script src="/app.js"></script>
+
+<script>
+
+loadTitles("movies", "movie");
+
+loadTitles("series", "series");
+
+</script>
+
+</body>
+</html>
