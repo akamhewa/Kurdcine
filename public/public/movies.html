@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>فیلمەکان | Kurd Cine</title>
+
+  <link rel="stylesheet" href="/style.css">
+
+</head>
+
+
+<body>
+
+
+<header class="navbar">
+
+  <a href="/" class="logo">
+    KURD<span>CINE</span>
+  </a>
+
+  <nav>
+
+    <a href="/">
+      سەرەکی
+    </a>
+
+    <a href="/movies.html">
+      فیلمەکان
+    </a>
+
+    <a href="/series.html">
+      زنجیرەکان
+    </a>
+
+    <a href="/admin.html">
+      بەڕێوەبردن
+    </a>
+
+  </nav>
+
+</header>
+
+
+
+<main>
+
+<section class="section">
+
+  <div class="section-title">
+
+    <h1>
+      🎬 فیلمەکان
+    </h1>
+
+  </div>
+
+
+  <div class="search-box">
+
+    <input
+      id="search"
+      type="search"
+      placeholder="گەڕان بە ناوی فیلم..."
+      autocomplete="off"
+    >
+
+  </div>
+
+
+  <div
+    id="movies"
+    class="movie-grid"
+  >
+
+  </div>
+
+</section>
+
+</main>
+
+
+
+<footer>
+
+  <div class="logo">
+    KURD<span>CINE</span>
+  </div>
+
+  <p>
+    © 2026 Kurd Cine
+  </p>
+
+</footer>
+
+
+
+<script src="/app.js"></script>
+
+
+<script>
+
+async function searchMovies() {
+
+  const query =
+    document
+      .getElementById("search")
+      .value
+      .toLowerCase();
+
+  const box =
+    document.getElementById("movies");
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/titles?type=movie&q=" +
+        encodeURIComponent(query)
+      );
+
+    const movies =
+      await response.json();
+
+
+    if (!movies.length) {
+
+      box.innerHTML = `
+        <div class="empty">
+          <p>
+            هیچ فیلمێک نەدۆزرایەوە.
+          </p>
+        </div>
+      `;
+
+      return;
+    }
+
+
+    box.innerHTML =
+      movies.map(movie => {
+
+        const poster =
+          movie.poster ||
+          "https://placehold.co/400x600/111522/ffffff?text=Kurd+Cine";
+
+
+        return `
+
+          <a
+            class="card"
+            href="/details.html?id=${movie.id}"
+          >
+
+            <img
+              src="${escapeHTML(poster)}"
+              alt="${escapeHTML(movie.title)}"
+              loading="lazy"
+            >
+
+
+            <div class="card-content">
+
+              <div class="card-title">
+                ${escapeHTML(movie.title)}
+              </div>
+
+
+              <div class="card-meta">
+
+                ${escapeHTML(movie.year || "")}
+
+                ${
+                  movie.genre
+                    ? " • " +
+                      escapeHTML(movie.genre)
+                    : ""
+                }
+
+              </div>
+
+            </div>
+
+          </a>
+
+        `;
+
+      }).join("");
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    box.innerHTML = `
+      <p>
+        کێشەیەک ڕوویدا.
+      </p>
+    `;
+
+  }
+
+}
+
+
+document
+  .getElementById("search")
+  .addEventListener(
+    "input",
+    searchMovies
+  );
+
+
+searchMovies();
+
+
+function escapeHTML(value) {
+
+  return String(value || "").replace(
+    /[&<>"']/g,
+
+    character => ({
+
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;"
+
+    })[character]
+
+  );
+
+}
+
+</script>
+
+
+</body>
+
+</html>
