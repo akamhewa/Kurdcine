@@ -23,21 +23,10 @@
   </a>
 
   <nav>
-
     <a href="/">سەرەکی</a>
-
-    <a href="/movies.html">
-      فیلمەکان
-    </a>
-
-    <a href="/series.html">
-      زنجیرەکان
-    </a>
-
-    <a href="/admin.html">
-      بەڕێوەبردن
-    </a>
-
+    <a href="/movies.html">فیلمەکان</a>
+    <a href="/series.html">زنجیرەکان</a>
+    <a href="/admin.html">بەڕێوەبردن</a>
   </nav>
 
 </header>
@@ -48,11 +37,7 @@
   <section class="section">
 
     <div id="details">
-
-      <p>
-        چاوەڕێ بکە...
-      </p>
-
+      <p>چاوەڕێ بکە...</p>
     </div>
 
   </section>
@@ -61,11 +46,7 @@
 
 
 <footer>
-
-  <p>
-    © Kurd Cine
-  </p>
-
+  <p>© Kurd Cine</p>
 </footer>
 
 
@@ -74,8 +55,7 @@
 const params =
   new URLSearchParams(window.location.search);
 
-const id =
-  params.get("id");
+const id = params.get("id");
 
 
 async function loadDetails() {
@@ -88,9 +68,7 @@ async function loadDetails() {
 
     element.innerHTML = `
       <div class="empty">
-        <p>
-          ناونیشانی ناوەڕۆک نەدۆزرایەوە.
-        </p>
+        <p>ناونیشانی ناوەڕۆک نەدۆزرایەوە.</p>
       </div>
     `;
 
@@ -101,28 +79,19 @@ async function loadDetails() {
   try {
 
     const response =
-      await fetch("/api/titles/" + encodeURIComponent(id));
+      await fetch(
+        "/api/titles/" +
+        encodeURIComponent(id)
+      );
 
 
     if (!response.ok) {
-      throw new Error("Failed to load details");
+      throw new Error("Title not found");
     }
 
 
-    const data =
-      await response.json();
-
-
     const title =
-      data.title || data;
-
-
-    const seasons =
-      data.seasons || [];
-
-
-    const episodes =
-      data.episodes || [];
+      await response.json();
 
 
     const poster =
@@ -136,7 +105,7 @@ async function loadDetails() {
 
         <img
           class="detail-poster"
-          src="${escapeHTML(poster)}"
+          src="${escapeHTML(title.poster || poster)}"
           alt="${escapeHTML(title.title)}"
           onerror="this.src='https://placehold.co/500x750/111522/ffffff?text=Kurd+Cine'"
         >
@@ -155,7 +124,8 @@ async function loadDetails() {
 
             ${
               title.genre
-                ? " • " + escapeHTML(title.genre)
+                ? " • " +
+                  escapeHTML(title.genre)
                 : ""
             }
 
@@ -174,13 +144,14 @@ async function loadDetails() {
 
 
           ${
-            title.type === "movie" && title.videoUrl
+            title.type === "movie" &&
+            title.video_url
               ? `
                 <a
                   class="btn"
-                  href="${escapeHTML(title.videoUrl)}"
+                  href="${escapeHTML(title.video_url)}"
                   target="_blank"
-                  rel="noopener"
+                  rel="noopener noreferrer"
                 >
                   ▶️ بینینی فیلم
                 </a>
@@ -195,27 +166,22 @@ async function loadDetails() {
 
       ${
         title.type === "series"
-          ? renderEpisodes(seasons, episodes)
+          ? renderSeasons(title.seasons || [])
           : ""
       }
 
     `;
-
 
   } catch (error) {
 
     console.error(error);
 
     element.innerHTML = `
-
       <div class="empty">
-
         <p>
           کێشەیەک ڕوویدا لە بارکردنی زانیاری.
         </p>
-
       </div>
-
     `;
 
   }
@@ -223,95 +189,118 @@ async function loadDetails() {
 }
 
 
-function renderEpisodes(seasons, episodes) {
+function renderSeasons(seasons) {
 
-  if (!episodes.length) {
+  if (!seasons.length) {
 
     return `
       <div class="section">
+
         <h2>
           ئەڵقەکان
         </h2>
 
         <p>
-          هێشتا هیچ ئەڵقەیەک زیاد نەکراوە.
+          هێشتا هیچ وەرز و ئەڵقەیەک زیاد نەکراوە.
         </p>
+
       </div>
     `;
 
   }
 
 
-  let html = "";
+  return seasons.map(season => {
+
+    const episodes =
+      season.episodes || [];
 
 
-  seasons.forEach(season => {
-
-    const seasonEpisodes =
-      episodes.filter(
-        episode =>
-          String(episode.seasonId) ===
-          String(season.id)
-      );
-
-
-    html += `
+    return `
 
       <div class="section">
 
-        <h2>
-          وەرزی ${escapeHTML(
-            season.seasonNumber ||
-            season.number ||
-            ""
-          )}
-        </h2>
+        <div class="section-title">
+
+          <h2>
+            وەرزی ${escapeHTML(
+              season.seasonNumber
+            )}
+          </h2>
+
+        </div>
 
 
         <div class="movie-grid">
 
           ${
-            seasonEpisodes.map(episode => `
+            episodes.length
+              ? episodes.map(episode => `
 
-              <div class="card">
+                  <div class="card">
 
-                <div class="card-content">
+                    <div class="card-content">
 
-                  <div class="card-title">
+                      <div class="card-title">
+                        ئەڵقە
+                        ${escapeHTML(
+                          episode.episodeNumber
+                        )}
+                        ${
+                          episode.title
+                            ? " - " +
+                              escapeHTML(
+                                episode.title
+                              )
+                            : ""
+                        }
+                      </div>
 
-                    ${escapeHTML(
-                      episode.title ||
-                      "ئەڵقە " +
-                      (episode.episodeNumber || "")
-                    )}
+
+                      ${
+                        episode.description
+                          ? `
+                            <div class="card-meta">
+                              ${escapeHTML(
+                                episode.description
+                              )}
+                            </div>
+                          `
+                          : ""
+                      }
+
+
+                      ${
+                        episode.video_url
+                          ? `
+                            <a
+                              class="btn"
+                              href="${escapeHTML(
+                                episode.video_url
+                              )}"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              ▶️ بینینی ئەڵقە
+                            </a>
+                          `
+                          : `
+                            <div class="card-meta">
+                              لینکێکی بینین نییە.
+                            </div>
+                          `
+                      }
+
+                    </div>
 
                   </div>
 
-
-                  ${
-                    episode.videoUrl
-                      ? `
-                        <a
-                          class="btn"
-                          href="${escapeHTML(episode.videoUrl)}"
-                          target="_blank"
-                          rel="noopener"
-                        >
-                          ▶️ بینینی ئەڵقە
-                        </a>
-                      `
-                      : `
-                        <div class="card-meta">
-                          لینکێکی بینین دانەنراوە.
-                        </div>
-                      `
-                  }
-
-                </div>
-
-              </div>
-
-            `).join("")
+                `).join("")
+              : `
+                <p>
+                  هیچ ئەڵقەیەک نییە.
+                </p>
+              `
           }
 
         </div>
@@ -320,10 +309,8 @@ function renderEpisodes(seasons, episodes) {
 
     `;
 
-  });
+  }).join("");
 
-
-  return html;
 }
 
 
@@ -331,7 +318,6 @@ function escapeHTML(value) {
 
   return String(value || "").replace(
     /[&<>"']/g,
-
     character => ({
 
       "&": "&amp;",
