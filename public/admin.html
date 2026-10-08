@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>بەڕێوەبردن | Kurd Cine</title>
+
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<header class="navbar">
+
+  <a href="/" class="logo">
+    KURD<span>CINE</span>
+  </a>
+
+  <nav>
+    <a href="/">سەرەکی</a>
+    <a href="/movies.html">فیلمەکان</a>
+    <a href="/series.html">زنجیرەکان</a>
+  </nav>
+
+</header>
+
+
+<main>
+
+  <section class="section">
+
+    <div class="section-title">
+      <h1>⚙️ بەڕێوەبردنی Kurd Cine</h1>
+    </div>
+
+
+    <!-- LOGIN -->
+
+    <div id="loginBox" class="admin">
+
+      <h2>چوونەژوورەوە</h2>
+
+      <form id="loginForm">
+
+        <input
+          id="username"
+          type="text"
+          placeholder="ناوی بەکارهێنەر"
+          required
+        >
+
+        <input
+          id="password"
+          type="password"
+          placeholder="وشەی نهێنی"
+          required
+        >
+
+        <button class="btn" type="submit">
+          چوونەژوورەوە
+        </button>
+
+      </form>
+
+      <p id="loginMessage"></p>
+
+    </div>
+
+
+    <!-- ADMIN PANEL -->
+
+    <div id="adminPanel" style="display:none;">
+
+      <div class="admin">
+
+        <div class="section-title">
+
+          <h2>
+            ➕ زیادکردنی ناوەڕۆک
+          </h2>
+
+        </div>
+
+
+        <form id="titleForm">
+
+          <label>
+            جۆر
+          </label>
+
+          <select id="type" required>
+
+            <option value="movie">
+              فیلم
+            </option>
+
+            <option value="series">
+              زنجیرە
+            </option>
+
+          </select>
+
+
+          <label>
+            ناونیشان
+          </label>
+
+          <input
+            id="title"
+            type="text"
+            placeholder="ناوی فیلم یان زنجیرە"
+            required
+          >
+
+
+          <label>
+            ساڵ
+          </label>
+
+          <input
+            id="year"
+            type="text"
+            placeholder="2026"
+          >
+
+
+          <label>
+            جۆر / Genre
+          </label>
+
+          <input
+            id="genre"
+            type="text"
+            placeholder="ئاکشن، دراما..."
+          >
+
+
+          <label>
+            وێنەی Poster
+          </label>
+
+          <input
+            id="poster"
+            type="url"
+            placeholder="https://..."
+          >
+
+
+          <label>
+            وێنەی Banner
+          </label>
+
+          <input
+            id="banner"
+            type="url"
+            placeholder="https://..."
+          >
+
+
+          <label>
+            دەربارەی ناوەڕۆک
+          </label>
+
+          <textarea
+            id="description"
+            rows="5"
+            placeholder="کورتەیەک دەربارەی فیلم یان زنجیرە..."
+          ></textarea>
+
+
+          <div id="movieVideoBox">
+
+            <label>
+              لینکی بینینی فیلم
+            </label>
+
+            <input
+              id="video_url"
+              type="url"
+              placeholder="https://..."
+            >
+
+          </div>
+
+
+          <button
+            class="btn"
+            type="submit"
+          >
+            💾 زیادکردن
+          </button>
+
+        </form>
+
+
+        <p id="titleMessage"></p>
+
+      </div>
+
+
+      <!-- SEASON -->
+
+      <div class="admin">
+
+        <div class="section-title">
+          <h2>📺 زیادکردنی وەرز</h2>
+        </div>
+
+
+        <form id="seasonForm">
+
+          <label>
+            زنجیرە
+          </label>
+
+          <select
+            id="seriesSelect"
+            required
+          ></select>
+
+
+          <label>
+            ژمارەی وەرز
+          </label>
+
+          <input
+            id="seasonNumber"
+            type="number"
+            min="1"
+            placeholder="1"
+            required
+          >
+
+
+          <button
+            class="btn"
+            type="submit"
+          >
+            ➕ زیادکردنی وەرز
+          </button>
+
+        </form>
+
+
+        <p id="seasonMessage"></p>
+
+      </div>
+
+
+      <!-- EPISODE -->
+
+      <div class="admin">
+
+        <div class="section-title">
+          <h2>🎬 زیادکردنی ئەڵقە</h2>
+        </div>
+
+
+        <form id="episodeForm">
+
+          <label>
+            وەرز
+          </label>
+
+          <select
+            id="seasonSelect"
+            required
+          ></select>
+
+
+          <label>
+            ژمارەی ئەڵقە
+          </label>
+
+          <input
+            id="episodeNumber"
+            type="number"
+            min="1"
+            placeholder="1"
+            required
+          >
+
+
+          <label>
+            ناوی ئەڵقە
+          </label>
+
+          <input
+            id="episodeTitle"
+            type="text"
+            placeholder="Episode 1"
+          >
+
+
+          <label>
+            دەربارەی ئەڵقە
+          </label>
+
+          <textarea
+            id="episodeDescription"
+            rows="4"
+            placeholder="کورتەی ئەڵقە..."
+          ></textarea>
+
+
+          <label>
+            لینکی بینینی ئەڵقە
+          </label>
+
+          <input
+            id="episodeVideo"
+            type="url"
+            placeholder="https://..."
+            required
+          >
+
+
+          <button
+            class="btn"
+            type="submit"
+          >
+            ➕ زیادکردنی ئەڵقە
+          </button>
+
+        </form>
+
+
+        <p id="episodeMessage"></p>
+
+      </div>
+
+
+      <!-- CONTENT LIST -->
+
+      <div class="admin">
+
+        <div class="section-title">
+
+          <h2>
+            📚 ناوەڕۆکی سایت
+          </h2>
+
+        </div>
+
+
+        <div id="contentList">
+          چاوەڕێ بکە...
+        </div>
+
+      </div>
+
+
+      <button
+        id="logout"
+        class="btn secondary"
+      >
+        دەرچوون
+      </button>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<footer>
+  <p>© Kurd Cine</p>
+</footer>
+
+
+<script>
+
+const loginBox =
+  document.getElementById("loginBox");
+
+const adminPanel =
+  document.getElementById("adminPanel");
+
+
+async function checkLogin() {
+
+  try {
+
+    const response =
+      await fetch("/api/admin/me");
+
+    const data =
+      await response.json();
+
+
+    if (data.authenticated) {
+
+      loginBox.style.display = "none";
+      adminPanel.style.display = "block";
+
+      loadAll();
+
+    }
+
+  } catch (error) {
+
+    console.error(error);
+
+  }
+
+}
+
+
+document
+  .getElementById("loginForm")
+  .addEventListener("submit", async event => {
+
+    event.preventDefault();
+
+
+    const username =
+      document.getElementById("username").value;
+
+    const password =
+      document.getElementById("password").value;
+
+
+    const message =
+      document.getElementById("loginMessage");
+
+
+    try {
+
+      const response =
+        await fetch("/api/admin/login", {
+
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+            username,
+            password
+          })
+
+        });
+
+
+      const data =
+        await response.json();
+
+
+      if (!response.ok) {
+
+        message.textContent =
+          data.error || "Login سەرکەوتوو نەبوو.";
+
+        return;
+
+      }
+
+
+      loginBox.style.display = "none";
+      adminPanel.style.display = "block";
+
+      loadAll();
+
+
+    } catch (error) {
+
+      message.textContent =
+        "کێشەیەک ڕوویدا.";
+
+    }
+
+  });
+
+
+document
+  .getElementById("type")
+  .addEventListener("change", () => {
+
+    const type =
+      document.getElementById("type").value;
+
+    document
+      .getElementById("movieVideoBox")
+      .style.display =
+        type === "movie"
+          ? "block"
+          : "none";
+
+  });
+
+
+document
+  .getElementById("titleForm")
+  .addEventListener("submit", async event => {
+
+    event.preventDefault();
+
+
+    const type =
+      document.getElementById("type").value;
+
+
+    const body = {
+
+      type,
+
+      title:
+        document.getElementById("title").value,
+
+      description:
+        document.getElementById("description").value,
+
+      year:
+        document.getElementById("year").value,
+
+      genre:
+        document.getElementById("genre").value,
+
+      poster:
+        document.getElementById("poster").value,
+
+      banner:
+        document.getElementById("banner").value,
+
+      video_url:
+        document.getElementById("video_url").value
+
+    };
+
+
+    const message =
+      document.getElementById("titleMessage");
+
+
+    try {
+
+      const response =
+        await fetch("/api/titles", {
+
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify(body)
+
+        });
+
+
+      const data =
+        await response.json();
+
+
+      if (!response.ok) {
+
+        message.textContent =
+          data.error || "هەڵەیەک ڕوویدا.";
+
+        return;
+
+      }
+
+
+      message.textContent =
+        "✅ ناوەڕۆک بە سەرکەوتوویی زیاد کرا.";
+
+      event.target.reset();
+
+      loadAll();
+
+
+    } catch (error) {
+
+      message.textContent =
+        "کێشەی پەیوەندی بە سێرڤەر.";
+
+    }
+
+  });
+
+
+async function loadAll() {
+
+  await loadSeries();
+  await loadSeasons();
+  await loadContent();
+
+}
+
+
+async function loadSeries() {
+
+  const response =
+    await fetch("/api/titles?type=series");
+
+  const series =
+    await response.json();
+
+
+  const select =
+    document.getElementById("seriesSelect");
+
+
+  select.innerHTML = "";
+
+
+  if (!series.length) {
+
+    select.innerHTML =
+      `<option value="">هیچ زنجیرەیەک نییە</option>`;
+
+    return;
+
+  }
+
+
+  series.forEach(item => {
+
+    select.innerHTML += `
+      <option value="${item.id}">
+        ${escapeHTML(item.title)}
+      </option>
+    `;
+
+  });
+
+}
+
+
+async function loadSeasons() {
+
+  const response =
+    await fetch("/api/titles?type=series");
+
+  const series =
+    await response.json();
+
+
+  const select =
+    document.getElementById("seasonSelect");
+
+
+  select.innerHTML = "";
+
+
+  for (const item of series) {
+
+    const response =
+      await fetch(
+        "/api/titles/" +
+        encodeURIComponent(item.id)
+      );
+
+
+    const data =
+      await response.json();
+
+
+    const seasons =
+      data.seasons || [];
+
+
+    seasons.forEach(season => {
+
+      select.innerHTML += `
+        <option value="${season.id}">
+          ${escapeHTML(item.title)}
+          — وەرزی ${escapeHTML(season.seasonNumber)}
+        </option>
+      `;
+
+    });
+
+  }
+
+
+  if (!select.innerHTML) {
+
+    select.innerHTML =
+      `<option value="">هێشتا وەرزێک نییە</option>`;
+
+  }
+
+}
+
+
+document
+  .getElementById("seasonForm")
+  .addEventListener("submit", async event => {
+
+    event.preventDefault();
+
+
+    const body = {
+
+      titleId:
+        document.getElementById("seriesSelect").value,
+
+      seasonNumber:
+        document.getElementById("seasonNumber").value
+
+    };
+
+
+    const message =
+      document.getElementById("seasonMessage");
+
+
+    try {
+
+      const response =
+        await fetch("/api/seasons", {
+
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify(body)
+
+        });
+
+
+      const data =
+        await response.json();
+
+
+      if (!response.ok) {
+
+        message.textContent =
+          data.error || "هەڵەیەک ڕوویدا.";
+
+        return;
+
+      }
+
+
+      message.textContent =
+        "✅ وەرز زیاد کرا.";
+
+      event.target.reset();
+
+      loadAll();
+
+
+    } catch (error) {
+
+      message.textContent =
+        "کێشەی پەیوەندی بە سێرڤەر.";
+
+    }
+
+  });
+
+
+document
+  .getElementById("episodeForm")
+  .addEventListener("submit", async event => {
+
+    event.preventDefault();
+
+
+    const body = {
+
+      seasonId:
+        document.getElementById("seasonSelect").value,
+
+      episodeNumber:
+        document.getElementById("episodeNumber").value,
+
+      title:
+        document.getElementById("episodeTitle").value,
+
+      description:
+        document.getElementById("episodeDescription").value,
+
+      video_url:
+        document.getElementById("episodeVideo").value
+
+    };
+
+
+    const message =
+      document.getElementById("episodeMessage");
+
+
+    try {
+
+      const response =
+        await fetch("/api/episodes", {
+
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify(body)
+
+        });
+
+
+      const data =
+        await response.json();
+
+
+      if (!response.ok) {
+
+        message.textContent =
+          data.error || "هەڵەیەک ڕوویدا.";
+
+        return;
+
+      }
+
+
+      message.textContent =
+        "✅ ئەڵقە زیاد کرا.";
+
+      event.target.reset();
+
+      loadAll();
+
+
+    } catch (error) {
+
+      message.textContent =
+        "کێشەی پەیوەندی بە سێرڤەر.";
+
+    }
+
+  });
+
+
+async function loadContent() {
+
+  const response =
+    await fetch("/api/titles");
+
+  const titles =
+    await response.json();
+
+
+  const element =
+    document.getElementById("contentList");
+
+
+  if (!titles.length) {
+
+    element.innerHTML =
+      "<p>هێشتا هیچ ناوەڕۆکێک نییە.</p>";
+
+    return;
+
+  }
+
+
+  element.innerHTML =
+    titles.map(item => `
+
+      <div class="card">
+
+        <div class="card-content">
+
+          <div class="card-title">
+            ${escapeHTML(item.title)}
+          </div>
+
+          <div class="card-meta">
+            ${
+              item.type === "movie"
+                ? "🎬 فیلم"
+                : "📺 زنجیرە"
+            }
+          </div>
+
+          <button
+            class="btn secondary"
+            onclick="deleteTitle(${item.id})"
+          >
+            🗑️ سڕینەوە
+          </button>
+
+        </div>
+
+      </div>
+
+    `).join("");
+
+}
+
+
+async function deleteTitle(id) {
+
+  if (!confirm("دڵنیایت لە سڕینەوەی ئەم ناوەڕۆکە؟")) {
+    return;
+  }
+
+
+  const response =
+    await fetch(
+      "/api/titles/" +
+      encodeURIComponent(id),
+      {
+        method: "DELETE"
+      }
+    );
+
+
+  if (response.ok) {
+    loadAll();
+  }
+
+}
+
+
+document
+  .getElementById("logout")
+  .addEventListener("click", async () => {
+
+    await fetch(
+      "/api/admin/logout",
+      {
+        method: "POST"
+      }
+    );
+
+
+    location.reload();
+
+  });
+
+
+function escapeHTML(value) {
+
+  return String(value || "").replace(
+    /[&<>"']/g,
+
+    character => ({
+
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;"
+
+    })[character]
+  );
+
+}
+
+
+checkLogin();
+
+</script>
+
+</body>
+
+</html>
